@@ -1,86 +1,163 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import Webcam from "react-webcam";
+import React, { useRef, useEffect, useState } from "react";
+import {
+  drawConnectors,
+  drawLandmarks,
+  lerp,
+  // @ts-ignore
+} from "@mediapipe/drawing_utils/drawing_utils";
+// @ts-ignore
+import { Camera } from "@mediapipe/camera_utils/camera_utils";
+import {
+  // FACEMESH_TESSELATION,
+  HAND_CONNECTIONS,
+  Holistic,
+  POSE_CONNECTIONS,
+  POSE_LANDMARKS_LEFT,
+  POSE_LANDMARKS_RIGHT,
+} from "@mediapipe/holistic";
 
-const Home: NextPage = () => {
+const Home = () => {
+  const webcamRef = useRef<any>(null);
+  const canvasRef = useRef<any>(null);
+
+  const onResults = async (results: any) => {
+    const canvasElement = canvasRef.current;
+    const canvasCtx = canvasElement.getContext("2d");
+
+    canvasElement.width = webcamRef.current.video.videoWidth;
+    canvasElement.height = webcamRef.current.video.videoHeight;
+
+    canvasCtx.save();
+
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(
+      results.image,
+      0,
+      0,
+      canvasElement.width,
+      canvasElement.height
+    );
+    if (
+      results.poseLandmarks ||
+      results.rightHandLandmarks ||
+      results.leftHandLandmarks
+    ) {
+      // Pose
+
+      drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+        color: "white",
+      });
+      drawLandmarks(
+        canvasCtx,
+        Object.values(POSE_LANDMARKS_LEFT).map(
+          (index) => results.poseLandmarks[index]
+        ),
+        { visibilityMin: 0.65, color: "white", fillColor: "rgb(255,138,0)" }
+      );
+      drawLandmarks(
+        canvasCtx,
+        Object.values(POSE_LANDMARKS_RIGHT).map(
+          (index) => results.poseLandmarks[index]
+        ),
+        { visibilityMin: 0.65, color: "white", fillColor: "rgb(0,217,231)" }
+      );
+
+      // Face
+
+      // drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_TESSELATION, {
+      //   color: "#C0C0C070",
+      //   lineWidth: 1,
+      // });
+
+      // Hands
+
+      drawConnectors(canvasCtx, results.leftHandLandmarks, HAND_CONNECTIONS, {
+        color: "white",
+        lineWidth: 5,
+      });
+      drawLandmarks(canvasCtx, results.leftHandLandmarks, {
+        color: "white",
+        fillColor: "rgb(255,138,0)",
+        lineWidth: 2,
+        radius: (data: any) => {
+          return lerp(data.from.z, -0.15, 0.1, 10, 1);
+        },
+      });
+      drawConnectors(canvasCtx, results.rightHandLandmarks, HAND_CONNECTIONS, {
+        color: "white",
+        lineWidth: 5,
+      });
+      drawLandmarks(canvasCtx, results.rightHandLandmarks, {
+        color: "white",
+        fillColor: "rgb(0,217,231)",
+        lineWidth: 2,
+        radius: (data: any) => {
+          return lerp(data.from.z, -0.15, 0.1, 10, 1);
+        },
+      });
+    }
+    canvasCtx.restore();
+  };
+
+  useEffect(() => {
+    const loadModel = async () => {
+      const holistic = new Holistic({
+        locateFile: (file) => {
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.3.1620694839/${file}`;
+        },
+      });
+      holistic.setOptions({
+        modelComplexity: 1,
+        smoothLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+      });
+
+      holistic.onResults(onResults);
+
+      if (
+        typeof webcamRef.current !== "undefined" &&
+        webcamRef.current !== null
+      ) {
+        const camera = new Camera(webcamRef.current.video, {
+          onFrame: async () => {
+            await holistic.send({ image: webcamRef?.current?.video });
+          },
+          width: 1280,
+          height: 720,
+        });
+        camera.start();
+      }
+    };
+
+    loadModel();
+  }, []);
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className="flex flex-col h-screen items-center justify-center gap-3">
+      <div className="flex flex-row items-center justify-center flex-wrap gap-3">
+        <Webcam
+          ref={webcamRef}
+          className={`hidden`}
+          mirrored={true}
+        />
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+        <canvas
+          ref={canvasRef}
+          className="h-screen"
+          style={{
+            transform: "scaleX(-1)",
+          }}
+        />
+      </div>
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
+      {/* <h1 className="text-2xl">
+        Predictions:{' '}
+        {predictions.length ? predictions[0].handInVideoConfidence : null}
+      </h1> */}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
