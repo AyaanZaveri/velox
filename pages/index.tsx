@@ -16,11 +16,12 @@ import {
   POSE_LANDMARKS_LEFT,
   POSE_LANDMARKS_RIGHT,
 } from "@mediapipe/holistic";
+import { drawLine } from "../utils/drawLine";
 
 const videoConstraints = {
   width: 1280,
   height: 720,
-  facingMode: "user"
+  facingMode: "user",
 };
 
 const Home = () => {
@@ -103,6 +104,48 @@ const Home = () => {
         },
       });
     }
+
+    drawLine(
+      results,
+      canvasCtx,
+      canvasElement,
+      "both",
+      4,
+      8,
+      5,
+      "white"
+    );
+    drawLine(
+      results,
+      canvasCtx,
+      canvasElement,
+      "both",
+      4,
+      12,
+      5,
+      "white"
+    );
+    drawLine(
+      results,
+      canvasCtx,
+      canvasElement,
+      "both",
+      4,
+      16,
+      5,
+      "white"
+    );
+    drawLine(
+      results,
+      canvasCtx,
+      canvasElement,
+      "both",
+      4,
+      20,
+      5,
+      "white"
+    );
+
     canvasCtx.restore();
   };
 
@@ -143,25 +186,24 @@ const Home = () => {
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
       <div className="flex flex-row items-center justify-center flex-wrap gap-3">
-        <Webcam ref={webcamRef} className="hidden" mirrored={true} videoConstraints={videoConstraints} />
-
+        <Webcam
+          ref={webcamRef}
+          className="hidden"
+          mirrored={true}
+          videoConstraints={videoConstraints}
+        />
         <canvas
           ref={canvasRef}
           className=""
           style={{
             transform: "scaleX(-1)",
-            height: "100vh",
+            height: "90vh",
             objectFit: "contain",
             position: "absolute",
             objectPosition: "center",
           }}
         />
       </div>
-
-      {/* <h1 className="text-2xl">
-        Predictions:{' '}
-        {predictions.length ? predictions[0].handInVideoConfidence : null}
-      </h1> */}
     </div>
   );
 };
