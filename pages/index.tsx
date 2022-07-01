@@ -29,7 +29,11 @@ const Home = () => {
   const webcamRef = useRef<any>(null);
   const canvasRef = useRef<any>(null);
 
+  const [predictions, setPredictions] = useState<any>();
+
   const onResults = async (results: any) => {
+    setPredictions(results);
+
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
 
@@ -106,46 +110,22 @@ const Home = () => {
       });
     }
 
-    drawLine(
-      results,
-      canvasCtx,
-      canvasElement,
-      "both",
-      4,
-      8,
-      5,
-      "white"
-    );
-    drawLine(
-      results,
-      canvasCtx,
-      canvasElement,
-      "both",
-      4,
-      12,
-      5,
-      "white"
-    );
-    drawLine(
-      results,
-      canvasCtx,
-      canvasElement,
-      "both",
-      4,
-      16,
-      5,
-      "white"
-    );
-    drawLine(
-      results,
-      canvasCtx,
-      canvasElement,
-      "both",
-      4,
-      20,
-      5,
-      "white"
-    );
+    drawLine(results, canvasCtx, canvasElement, "both", 4, 8, 5, "white");
+    drawLine(results, canvasCtx, canvasElement, "both", 4, 12, 5, "white");
+    drawLine(results, canvasCtx, canvasElement, "both", 4, 16, 5, "white");
+    drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
+
+    if (results?.leftHandLandmarks) {
+      if (
+        1080 - results?.leftHandLandmarks[8]?.x * 1080 <= 300 &&
+        1080 - results?.leftHandLandmarks[8]?.x * 1080 >= 100 &&
+        results?.leftHandLandmarks[8].y * 720 <= 300 &&
+        results?.leftHandLandmarks[8].y * 720 >= 100
+      ) {
+        canvasCtx.fillStyle = "#ff0000";
+      }
+    }
+    canvasCtx.fillRect(1080 - 100, 100, 200, 200);
 
     canvasCtx.restore();
   };
@@ -208,6 +188,15 @@ const Home = () => {
           }}
         />
       </div>
+      <h1 className="absolute">
+        {predictions?.leftHandLandmarks
+          ? JSON.stringify(
+              `${1080 - predictions?.leftHandLandmarks[8].x * 1080}, ${
+                predictions?.leftHandLandmarks[8].y * 720
+              }`
+            )
+          : null}
+      </h1>
     </div>
   );
 };
