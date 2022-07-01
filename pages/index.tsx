@@ -17,6 +17,7 @@ import {
   POSE_LANDMARKS_RIGHT,
 } from "@mediapipe/holistic";
 import { drawLine } from "../utils/drawLine";
+import Head from "next/head";
 
 const videoConstraints = {
   width: 1280,
@@ -185,6 +186,9 @@ const Home = () => {
 
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
+      <Head>
+        <title>Velox</title>
+      </Head>
       <div className="flex flex-row items-center justify-center flex-wrap gap-3">
         <Webcam
           ref={webcamRef}
