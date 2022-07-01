@@ -197,7 +197,7 @@ const Home = () => {
           className=""
           style={{
             transform: "scaleX(-1)",
-            height: "90vh",
+            height: "100vh",
             objectFit: "contain",
             position: "absolute",
             objectPosition: "center",
