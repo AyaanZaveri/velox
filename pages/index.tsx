@@ -17,6 +17,12 @@ import {
   POSE_LANDMARKS_RIGHT,
 } from "@mediapipe/holistic";
 
+const videoConstraints = {
+  width: 1280,
+  height: 720,
+  facingMode: "user"
+};
+
 const Home = () => {
   const webcamRef = useRef<any>(null);
   const canvasRef = useRef<any>(null);
@@ -137,17 +143,17 @@ const Home = () => {
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
       <div className="flex flex-row items-center justify-center flex-wrap gap-3">
-        <Webcam
-          ref={webcamRef}
-          className={`hidden`}
-          mirrored={true}
-        />
+        <Webcam ref={webcamRef} className="hidden" mirrored={true} videoConstraints={videoConstraints} />
 
         <canvas
           ref={canvasRef}
-          className="h-screen"
+          className=""
           style={{
             transform: "scaleX(-1)",
+            height: "100vh",
+            objectFit: "contain",
+            position: "absolute",
+            objectPosition: "center",
           }}
         />
       </div>
