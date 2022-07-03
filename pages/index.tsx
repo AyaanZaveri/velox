@@ -30,6 +30,7 @@ const Home = () => {
   const canvasRef = useRef<any>(null);
 
   const [predictions, setPredictions] = useState<any>();
+  const [showLandmarks, setShowLandmarks] = useState<boolean>(true)
 
   const onResults = async (results: any) => {
     setPredictions(results);
@@ -115,19 +116,32 @@ const Home = () => {
     drawLine(results, canvasCtx, canvasElement, "both", 4, 16, 5, "white");
     drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
 
-    if (results?.leftHandLandmarks) {
-      if (
-        1080 - results?.leftHandLandmarks[8]?.x * 1080 <= 300 &&
-        1080 - results?.leftHandLandmarks[8]?.x * 1080 >= 100 &&
-        results?.leftHandLandmarks[8].y * 720 <= 300 &&
-        results?.leftHandLandmarks[8].y * 720 >= 100
-      ) {
-        canvasCtx.fillStyle = "#ff0000";
+    const createRect = (
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      results: any,
+      canvasCtx: any
+    ) => {
+      if (results?.leftHandLandmarks) {
+        if (
+          // subtract by 1080 since the video stream is backwards
+          // 30 is an offset
+          1080 - results?.leftHandLandmarks[8]?.x * 1080 >= x - 30 &&
+          1080 - results?.leftHandLandmarks[8]?.x * 1080 <= x + width - 30 &&
+          results?.leftHandLandmarks[8].y * 720 >= y &&
+          results?.leftHandLandmarks[8].y * 720 <= x + height
+        ) {
+          canvasCtx.fillStyle = "#ff0000";
+        }
       }
-    }
-    canvasCtx.fillRect(1080 - 100, 100, 200, 200);
+      canvasCtx.fillRect(1080 - x, y, width, height);
 
-    canvasCtx.restore();
+      canvasCtx.restore();
+    };
+
+    createRect(100, 100, 200, 200, results, canvasCtx)
   };
 
   useEffect(() => {
