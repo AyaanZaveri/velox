@@ -186,7 +186,7 @@ const Home = () => {
           }}
         />
       </div>
-      <h1 className="absolute">
+      {/* <h1 className="absolute">
         {predictions?.leftHandLandmarks
           ? JSON.stringify(
               `${1080 - predictions?.leftHandLandmarks[8].x * 1080}, ${
@@ -203,7 +203,7 @@ const Home = () => {
               }`
             )
           : null}
-      </h1>
+      </h1> */}
     </div>
   );
 };
