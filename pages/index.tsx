@@ -32,6 +32,7 @@ const Home = () => {
 
   const [predictions, setPredictions] = useState<any>();
   const [showLandmarks, setShowLandmarks] = useState<boolean>(true);
+  const [hovering, setHovering] = useState<number>(0);
 
   const onResults = async (results: any) => {
     setPredictions(results);
@@ -124,8 +125,28 @@ const Home = () => {
       drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
     }
 
-    createRect(100, 100, 200, 200, results, canvasCtx, canvasElement, "left", 30);
-    createRect(1080 - 100, 100, 200, 200, results, canvasCtx, canvasElement, "right", 30);
+    createRect(
+      100,
+      100,
+      200,
+      200,
+      results,
+      canvasCtx,
+      canvasElement,
+      "left",
+      30
+    );
+    createRect(
+      1080 - 100,
+      100,
+      200,
+      200,
+      results,
+      canvasCtx,
+      canvasElement,
+      "right",
+      30
+    );
   };
 
   useEffect(() => {

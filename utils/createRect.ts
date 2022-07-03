@@ -26,10 +26,13 @@ export const createRect = (
         canvasCtx.fillStyle = "#ff0000";
       }
     }
+
     canvasCtx.fillRect(1080 - x, y, width, height);
 
     canvasCtx.restore();
-  } else if (hand == "right") {
+  }
+
+  if (hand == "right") {
     if (results?.rightHandLandmarks) {
       if (
         // subtract by 1080 since the video stream is backwards
