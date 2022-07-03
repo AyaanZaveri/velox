@@ -18,6 +18,7 @@ import {
 } from "@mediapipe/holistic";
 import { drawLine } from "../utils/drawLine";
 import Head from "next/head";
+import { createRect } from "../utils/createRect";
 
 const videoConstraints = {
   width: 1280,
@@ -123,62 +124,8 @@ const Home = () => {
       drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
     }
 
-    const createRect = (
-      x: number,
-      y: number,
-      width: number,
-      height: number,
-      results: any,
-      canvasCtx: any,
-      hand = "right",
-      offset = 30
-    ) => {
-      if (hand == "left") {
-        if (results?.leftHandLandmarks) {
-          if (
-            // subtract by 1080 since the video stream is backwards
-            // 30 is an offset
-            canvasElement.width -
-              results?.leftHandLandmarks[8]?.x * canvasElement.width >=
-              x &&
-            canvasElement.width -
-              results?.leftHandLandmarks[8]?.x * canvasElement.width <=
-              x + width &&
-            results?.leftHandLandmarks[8].y * canvasElement.height >= y &&
-            results?.leftHandLandmarks[8].y * canvasElement.height <= y + height
-          ) {
-            canvasCtx.fillStyle = "#ff0000";
-          }
-        }
-        canvasCtx.fillRect(1080 - x, y, width, height);
-
-        canvasCtx.restore();
-      } else if (hand == "right") {
-        if (results?.rightHandLandmarks) {
-          if (
-            // subtract by 1080 since the video stream is backwards
-            // 30 is an offset
-            canvasElement.width -
-              results?.rightHandLandmarks[8]?.x * canvasElement.width >=
-              x &&
-            canvasElement.width -
-              results?.rightHandLandmarks[8]?.x * canvasElement.width <=
-              x + width &&
-            results?.rightHandLandmarks[8].y * canvasElement.height >= y &&
-            results?.rightHandLandmarks[8].y * canvasElement.height <=
-              y + height
-          ) {
-            canvasCtx.fillStyle = "#ff0000";
-          }
-        }
-        canvasCtx.fillRect(1080 - x, y, width, height);
-
-        canvasCtx.restore();
-      }
-    };
-
-    createRect(100, 100, 200, 200, results, canvasCtx, "left", 30);
-    createRect(1080 - 100, 100, 200, 200, results, canvasCtx, "right", 30);
+    createRect(100, 100, 200, 200, results, canvasCtx, canvasElement, "left", 30);
+    createRect(1080 - 100, 100, 200, 200, results, canvasCtx, canvasElement, "right", 30);
   };
 
   useEffect(() => {
