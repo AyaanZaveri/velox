@@ -30,7 +30,7 @@ const Home = () => {
   const canvasRef = useRef<any>(null);
 
   const [predictions, setPredictions] = useState<any>();
-  const [showLandmarks, setShowLandmarks] = useState<boolean>(true)
+  const [showLandmarks, setShowLandmarks] = useState<boolean>(true);
 
   const onResults = async (results: any) => {
     setPredictions(results);
@@ -51,70 +51,77 @@ const Home = () => {
       canvasElement.width,
       canvasElement.height
     );
-    if (
-      results.poseLandmarks ||
-      results.rightHandLandmarks ||
-      results.leftHandLandmarks
-    ) {
-      // Pose
+    if (showLandmarks) {
+      if (
+        results.poseLandmarks ||
+        results.rightHandLandmarks ||
+        results.leftHandLandmarks
+      ) {
+        // Pose
 
-      drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-        color: "white",
-      });
-      drawLandmarks(
-        canvasCtx,
-        Object.values(POSE_LANDMARKS_LEFT).map(
-          (index) => results.poseLandmarks[index]
-        ),
-        { visibilityMin: 0.65, color: "white", fillColor: "rgb(255,138,0)" }
-      );
-      drawLandmarks(
-        canvasCtx,
-        Object.values(POSE_LANDMARKS_RIGHT).map(
-          (index) => results.poseLandmarks[index]
-        ),
-        { visibilityMin: 0.65, color: "white", fillColor: "rgb(0,217,231)" }
-      );
+        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+          color: "white",
+        });
+        drawLandmarks(
+          canvasCtx,
+          Object.values(POSE_LANDMARKS_LEFT).map(
+            (index) => results.poseLandmarks[index]
+          ),
+          { visibilityMin: 0.65, color: "white", fillColor: "rgb(255,138,0)" }
+        );
+        drawLandmarks(
+          canvasCtx,
+          Object.values(POSE_LANDMARKS_RIGHT).map(
+            (index) => results.poseLandmarks[index]
+          ),
+          { visibilityMin: 0.65, color: "white", fillColor: "rgb(0,217,231)" }
+        );
 
-      // Face
+        // Face
 
-      // drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_TESSELATION, {
-      //   color: "#C0C0C070",
-      //   lineWidth: 1,
-      // });
+        // drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_TESSELATION, {
+        //   color: "#C0C0C070",
+        //   lineWidth: 1,
+        // });
 
-      // Hands
+        // Hands
 
-      drawConnectors(canvasCtx, results.leftHandLandmarks, HAND_CONNECTIONS, {
-        color: "white",
-        lineWidth: 5,
-      });
-      drawLandmarks(canvasCtx, results.leftHandLandmarks, {
-        color: "white",
-        fillColor: "rgb(255,138,0)",
-        lineWidth: 2,
-        radius: (data: any) => {
-          return lerp(data.from.z, -0.15, 0.1, 10, 1);
-        },
-      });
-      drawConnectors(canvasCtx, results.rightHandLandmarks, HAND_CONNECTIONS, {
-        color: "white",
-        lineWidth: 5,
-      });
-      drawLandmarks(canvasCtx, results.rightHandLandmarks, {
-        color: "white",
-        fillColor: "rgb(0,217,231)",
-        lineWidth: 2,
-        radius: (data: any) => {
-          return lerp(data.from.z, -0.15, 0.1, 10, 1);
-        },
-      });
+        drawConnectors(canvasCtx, results.leftHandLandmarks, HAND_CONNECTIONS, {
+          color: "white",
+          lineWidth: 5,
+        });
+        drawLandmarks(canvasCtx, results.leftHandLandmarks, {
+          color: "white",
+          fillColor: "rgb(255,138,0)",
+          lineWidth: 2,
+          radius: (data: any) => {
+            return lerp(data.from.z, -0.15, 0.1, 10, 1);
+          },
+        });
+        drawConnectors(
+          canvasCtx,
+          results.rightHandLandmarks,
+          HAND_CONNECTIONS,
+          {
+            color: "white",
+            lineWidth: 5,
+          }
+        );
+        drawLandmarks(canvasCtx, results.rightHandLandmarks, {
+          color: "white",
+          fillColor: "rgb(0,217,231)",
+          lineWidth: 2,
+          radius: (data: any) => {
+            return lerp(data.from.z, -0.15, 0.1, 10, 1);
+          },
+        });
+      }
+
+      drawLine(results, canvasCtx, canvasElement, "both", 4, 8, 5, "white");
+      drawLine(results, canvasCtx, canvasElement, "both", 4, 12, 5, "white");
+      drawLine(results, canvasCtx, canvasElement, "both", 4, 16, 5, "white");
+      drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
     }
-
-    drawLine(results, canvasCtx, canvasElement, "both", 4, 8, 5, "white");
-    drawLine(results, canvasCtx, canvasElement, "both", 4, 12, 5, "white");
-    drawLine(results, canvasCtx, canvasElement, "both", 4, 16, 5, "white");
-    drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
 
     const createRect = (
       x: number,
@@ -122,26 +129,56 @@ const Home = () => {
       width: number,
       height: number,
       results: any,
-      canvasCtx: any
+      canvasCtx: any,
+      hand = "right",
+      offset = 30
     ) => {
-      if (results?.leftHandLandmarks) {
-        if (
-          // subtract by 1080 since the video stream is backwards
-          // 30 is an offset
-          1080 - results?.leftHandLandmarks[8]?.x * 1080 >= x - 30 &&
-          1080 - results?.leftHandLandmarks[8]?.x * 1080 <= x + width - 30 &&
-          results?.leftHandLandmarks[8].y * 720 >= y &&
-          results?.leftHandLandmarks[8].y * 720 <= x + height
-        ) {
-          canvasCtx.fillStyle = "#ff0000";
+      if (hand == "left") {
+        if (results?.leftHandLandmarks) {
+          if (
+            // subtract by 1080 since the video stream is backwards
+            // 30 is an offset
+            canvasElement.width -
+              results?.leftHandLandmarks[8]?.x * canvasElement.width >=
+              x &&
+            canvasElement.width -
+              results?.leftHandLandmarks[8]?.x * canvasElement.width <=
+              x + width &&
+            results?.leftHandLandmarks[8].y * canvasElement.height >= y &&
+            results?.leftHandLandmarks[8].y * canvasElement.height <= y + height
+          ) {
+            canvasCtx.fillStyle = "#ff0000";
+          }
         }
-      }
-      canvasCtx.fillRect(1080 - x, y, width, height);
+        canvasCtx.fillRect(1080 - x, y, width, height);
 
-      canvasCtx.restore();
+        canvasCtx.restore();
+      } else if (hand == "right") {
+        if (results?.rightHandLandmarks) {
+          if (
+            // subtract by 1080 since the video stream is backwards
+            // 30 is an offset
+            canvasElement.width -
+              results?.rightHandLandmarks[8]?.x * canvasElement.width >=
+              x &&
+            canvasElement.width -
+              results?.rightHandLandmarks[8]?.x * canvasElement.width <=
+              x + width &&
+            results?.rightHandLandmarks[8].y * canvasElement.height >= y &&
+            results?.rightHandLandmarks[8].y * canvasElement.height <=
+              y + height
+          ) {
+            canvasCtx.fillStyle = "#ff0000";
+          }
+        }
+        canvasCtx.fillRect(1080 - x, y, width, height);
+
+        canvasCtx.restore();
+      }
     };
 
-    createRect(100, 100, 200, 200, results, canvasCtx)
+    createRect(100, 100, 200, 200, results, canvasCtx, "left", 30);
+    createRect(1080 - 100, 100, 200, 200, results, canvasCtx, "right", 30);
   };
 
   useEffect(() => {
@@ -207,6 +244,15 @@ const Home = () => {
           ? JSON.stringify(
               `${1080 - predictions?.leftHandLandmarks[8].x * 1080}, ${
                 predictions?.leftHandLandmarks[8].y * 720
+              }`
+            )
+          : null}
+      </h1>
+      <h1 className="absolute">
+        {predictions?.rightHandLandmarks
+          ? JSON.stringify(
+              `${1080 - predictions?.rightHandLandmarks[8].x * 1080}, ${
+                predictions?.rightHandLandmarks[8].y * 720
               }`
             )
           : null}
