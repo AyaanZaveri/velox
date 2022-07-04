@@ -8,7 +8,8 @@ export const createRect = (
   canvasElement: any,
   hand = "right",
   color = "red",
-  offset = 30
+  offset = 30,
+  setBool: any
 ) => {
   if (hand == "left") {
     if (results?.leftHandLandmarks) {
@@ -25,6 +26,9 @@ export const createRect = (
         results?.leftHandLandmarks[8].y * canvasElement.height <= y + height
       ) {
         canvasCtx.fillStyle = color;
+        setBool(true);
+      } else {
+        setBool(false);
       }
     }
 
@@ -48,6 +52,9 @@ export const createRect = (
         results?.rightHandLandmarks[8].y * canvasElement.height <= y + height
       ) {
         canvasCtx.fillStyle = color;
+        setBool(true);
+      } else {
+        setBool(false);
       }
     }
     canvasCtx.fillRect(1080 - x, y, width, height);

@@ -31,7 +31,9 @@ const Home = () => {
   const canvasRef = useRef<any>(null);
 
   const [predictions, setPredictions] = useState<any>();
-  const [showLandmarks, setShowLandmarks] = useState<boolean>(true);
+  const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
+  const [bool, setBool] = useState<boolean>(false);
+  const [hovering, setHovering] = useState<boolean>(false);
 
   const onResults = async (results: any) => {
     setPredictions(results ? results : "");
@@ -134,7 +136,8 @@ const Home = () => {
       canvasElement,
       "left",
       "green",
-      30
+      30,
+      setBool
     );
     createRect(
       1080 - 100,
@@ -146,9 +149,18 @@ const Home = () => {
       canvasElement,
       "right",
       "red",
-      30
+      30,
+      setBool
     );
   };
+
+  console.log(bool);
+
+  if (bool == true) {
+    setTimeout(() => setHovering(true), 3000);
+  } else {
+    setHovering(false);
+  }
 
   const loadModel = async () => {
     const holistic = new Holistic({
