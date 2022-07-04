@@ -19,6 +19,7 @@ import {
 import { drawLine } from "../utils/drawLine";
 import Head from "next/head";
 import { createRect } from "../utils/createRect";
+import { timer } from "../utils/timer";
 
 const videoConstraints = {
   width: 1280,
@@ -34,6 +35,7 @@ const Home = () => {
   const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
   const [bool, setBool] = useState<boolean>(false);
   const [hovering, setHovering] = useState<boolean>(false);
+  const [timeLeft, setTimeLeft] = useState();
 
   const onResults = async (results: any) => {
     setPredictions(results ? results : "");
@@ -125,7 +127,6 @@ const Home = () => {
       drawLine(results, canvasCtx, canvasElement, "both", 4, 16, 5, "white");
       drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
     }
-
     createRect(
       100,
       100,
@@ -137,6 +138,7 @@ const Home = () => {
       "left",
       "green",
       30,
+      hovering,
       setBool
     );
     createRect(
@@ -150,17 +152,19 @@ const Home = () => {
       "right",
       "red",
       30,
+      hovering,
       setBool
     );
   };
 
-  console.log(bool);
-
-  if (bool == true) {
-    setTimeout(() => setHovering(true), 3000);
-  } else {
-    setHovering(false);
-  }
+  useEffect(() => {
+    if (bool == true) {
+      setTimeout(() => setHovering(true), 1000);
+    }
+    if (bool == false) {
+      setTimeout(() => setHovering(false), 1000);
+    }
+  });
 
   const loadModel = async () => {
     const holistic = new Holistic({
@@ -225,16 +229,8 @@ const Home = () => {
               }`
             )
           : null}
-      </h1>
-      <h1 className="absolute">
-        {predictions?.rightHandLandmarks
-          ? JSON.stringify(
-              `${1080 - predictions?.rightHandLandmarks[8].x * 1080}, ${
-                predictions?.rightHandLandmarks[8].y * 720
-              }`
-            )
-          : null}
       </h1> */}
+      <h1 className="absolute">{}</h1>
     </div>
   );
 };
