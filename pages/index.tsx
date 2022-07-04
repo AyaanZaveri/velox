@@ -32,7 +32,7 @@ const Home = () => {
   const canvasRef = useRef<any>(null);
 
   const [predictions, setPredictions] = useState<any>();
-  const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
+  const [showLandmarks, setShowLandmarks] = useState<boolean>(true);
   const [bool, setBool] = useState<boolean>(false);
   const [hovering, setHovering] = useState<boolean>(false);
   const [time, setTime] = useState();
@@ -130,28 +130,30 @@ const Home = () => {
     createRect(
       100,
       100,
-      200,
-      200,
+      100,
+      100,
       results,
       canvasCtx,
       canvasElement,
       "left",
       "rgb(34, 197, 94, 0.75)",
       30,
+      "on",
       hovering,
       setBool
     );
     createRect(
-      1080 - 100,
+      250,
       100,
-      200,
-      200,
+      100,
+      100,
       results,
       canvasCtx,
       canvasElement,
-      "right",
+      "left",
       "rgb(239, 68, 68, 0.75)",
       30,
+      "off",
       hovering,
       setBool
     );
@@ -218,7 +220,10 @@ const Home = () => {
       />
       {hovering ? (
         <h1 className="absolute text-3xl text-white bg-slate-900/30 p-3 rounded-lg backdrop-blur-md font-light">
-          <span className="font-semibold">{new Date().toLocaleTimeString()}</span> is the time.
+          <span className="font-semibold">
+            {new Date().toLocaleTimeString()}
+          </span>{" "}
+          is the time.
         </h1>
       ) : null}
     </div>
