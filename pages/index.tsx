@@ -32,10 +32,9 @@ const Home = () => {
 
   const [predictions, setPredictions] = useState<any>();
   const [showLandmarks, setShowLandmarks] = useState<boolean>(true);
-  const [hovering, setHovering] = useState<number>(0);
 
   const onResults = async (results: any) => {
-    setPredictions(results);
+    setPredictions(results ? results : "");
 
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
@@ -134,6 +133,7 @@ const Home = () => {
       canvasCtx,
       canvasElement,
       "left",
+      "green",
       30
     );
     createRect(
@@ -145,49 +145,47 @@ const Home = () => {
       canvasCtx,
       canvasElement,
       "right",
+      "red",
       30
     );
   };
 
-  useEffect(() => {
-    const loadModel = async () => {
-      const holistic = new Holistic({
-        locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.3.1620694839/${file}`;
+  const loadModel = async () => {
+    const holistic = new Holistic({
+      locateFile: (file) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.3.1620694839/${file}`;
+      },
+    });
+    holistic.setOptions({
+      modelComplexity: 1,
+      smoothLandmarks: true,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
+
+    holistic.onResults(onResults);
+
+    if (
+      typeof webcamRef.current !== "undefined" &&
+      webcamRef.current !== null
+    ) {
+      const camera = new Camera(webcamRef.current.video, {
+        onFrame: async () => {
+          await holistic.send({ image: webcamRef?.current?.video });
         },
+        width: 1280,
+        height: 720,
       });
-      holistic.setOptions({
-        modelComplexity: 1,
-        smoothLandmarks: true,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-      });
+      camera.start();
+    }
+  };
 
-      holistic.onResults(onResults);
-
-      if (
-        typeof webcamRef.current !== "undefined" &&
-        webcamRef.current !== null
-      ) {
-        const camera = new Camera(webcamRef.current.video, {
-          onFrame: async () => {
-            await holistic.send({ image: webcamRef?.current?.video });
-          },
-          width: 1280,
-          height: 720,
-        });
-        camera.start();
-      }
-    };
-
+  useEffect(() => {
     loadModel();
   }, []);
 
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
-      <Head>
-        <title>Velox</title>
-      </Head>
       <div className="flex flex-row items-center justify-center flex-wrap gap-3">
         <Webcam
           ref={webcamRef}

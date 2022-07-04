@@ -7,6 +7,7 @@ export const createRect = (
   canvasCtx: any,
   canvasElement: any,
   hand = "right",
+  color = "red",
   offset = 30
 ) => {
   if (hand == "left") {
@@ -23,7 +24,7 @@ export const createRect = (
         results?.leftHandLandmarks[8].y * canvasElement.height >= y &&
         results?.leftHandLandmarks[8].y * canvasElement.height <= y + height
       ) {
-        canvasCtx.fillStyle = "#ff0000";
+        canvasCtx.fillStyle = color;
       }
     }
 
@@ -46,7 +47,7 @@ export const createRect = (
         results?.rightHandLandmarks[8].y * canvasElement.height >= y &&
         results?.rightHandLandmarks[8].y * canvasElement.height <= y + height
       ) {
-        canvasCtx.fillStyle = "#ff0000";
+        canvasCtx.fillStyle = color;
       }
     }
     canvasCtx.fillRect(1080 - x, y, width, height);
