@@ -12,7 +12,7 @@ export const createRect = (
   hovering: boolean,
   setBool: any
 ) => {
-  canvasCtx.fillStyle = "black";
+  canvasCtx.fillStyle = "rgb(15, 23, 42, 0.75)";
   if (hand == "left") {
     if (results?.leftHandLandmarks) {
       if (

@@ -137,7 +137,7 @@ const Home = () => {
       canvasCtx,
       canvasElement,
       "left",
-      "green",
+      "rgb(34, 197, 94, 0.75)",
       30,
       hovering,
       setBool
@@ -151,7 +151,7 @@ const Home = () => {
       canvasCtx,
       canvasElement,
       "right",
-      "red",
+      "rgb(239, 68, 68, 0.75)",
       30,
       hovering,
       setBool
@@ -203,34 +203,20 @@ const Home = () => {
 
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
-      <div className="flex flex-row items-center justify-center flex-wrap gap-3">
-        <Webcam
-          ref={webcamRef}
-          className="hidden"
-          mirrored={true}
-          videoConstraints={videoConstraints}
-        />
-        <canvas
-          ref={canvasRef}
-          className=""
-          style={{
-            transform: "scaleX(-1)",
-            height: "100vh",
-            objectFit: "contain",
-            position: "absolute",
-            objectPosition: "center",
-          }}
-        />
-      </div>
-      {/* <h1 className="absolute">
-        {predictions?.leftHandLandmarks
-          ? JSON.stringify(
-              `${1080 - predictions?.leftHandLandmarks[8].x * 1080}, ${
-                predictions?.leftHandLandmarks[8].y * 720
-              }`
-            )
-          : null}
-      </h1> */}
+      <Webcam
+        ref={webcamRef}
+        className="hidden"
+        mirrored={true}
+        videoConstraints={videoConstraints}
+      />
+      <canvas
+        ref={canvasRef}
+        className=""
+        style={{
+          transform: "scaleX(-1)",
+          height: "100vh",
+        }}
+      />
       {hovering ? (
         <h1 className="absolute text-3xl text-white bg-slate-900/30 p-3 rounded-lg backdrop-blur-md">
           {new Date().toLocaleTimeString()}
