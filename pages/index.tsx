@@ -231,7 +231,11 @@ const Home = () => {
             )
           : null}
       </h1> */}
-      <h1 className="absolute">{hovering ? Date.now().toLocaleString() : null}</h1>
+      {hovering ? (
+        <h1 className="absolute text-3xl text-white bg-slate-900/30 p-3 rounded-lg backdrop-blur-md">
+          {new Date().toLocaleTimeString()}
+        </h1>
+      ) : null}
     </div>
   );
 };

@@ -12,6 +12,7 @@ export const createRect = (
   hovering: boolean,
   setBool: any
 ) => {
+  canvasCtx.fillStyle = "black";
   if (hand == "left") {
     if (results?.leftHandLandmarks) {
       if (
@@ -27,11 +28,7 @@ export const createRect = (
         results?.leftHandLandmarks[8].y * canvasElement.height <= y + height
       ) {
         setBool(true);
-        if (hovering == true) {
-          canvasCtx.fillStyle = "green";
-        } else {
-          canvasCtx.fillStyle = "red";
-        }
+        canvasCtx.fillStyle = color;
       }
     }
 
@@ -55,11 +52,7 @@ export const createRect = (
         results?.rightHandLandmarks[8].y * canvasElement.height <= y + height
       ) {
         setBool(false);
-        if (hovering == true) {
-          canvasCtx.fillStyle = "green";
-        } else {
-          canvasCtx.fillStyle = "red";
-        }
+        canvasCtx.fillStyle = color;
       }
     }
     canvasCtx?.fillRect(1080 - x, y, width, height);
