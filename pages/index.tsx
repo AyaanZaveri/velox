@@ -19,7 +19,6 @@ import {
 import { drawLine } from "../utils/drawLine";
 import Head from "next/head";
 import { createRect } from "../utils/createRect";
-import { timer } from "../utils/timer";
 import axios from "axios";
 
 const videoConstraints = {
