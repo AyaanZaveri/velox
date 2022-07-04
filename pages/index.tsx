@@ -20,6 +20,7 @@ import { drawLine } from "../utils/drawLine";
 import Head from "next/head";
 import { createRect } from "../utils/createRect";
 import { timer } from "../utils/timer";
+import axios from "axios";
 
 const videoConstraints = {
   width: 1280,
@@ -35,7 +36,7 @@ const Home = () => {
   const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
   const [bool, setBool] = useState<boolean>(false);
   const [hovering, setHovering] = useState<boolean>(false);
-  const [timeLeft, setTimeLeft] = useState();
+  const [time, setTime] = useState();
 
   const onResults = async (results: any) => {
     setPredictions(results ? results : "");
@@ -230,7 +231,7 @@ const Home = () => {
             )
           : null}
       </h1> */}
-      <h1 className="absolute">{}</h1>
+      <h1 className="absolute">{hovering ? Date.now().toLocaleString() : null}</h1>
     </div>
   );
 };
