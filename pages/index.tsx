@@ -160,10 +160,10 @@ const Home = () => {
 
   useEffect(() => {
     if (bool == true) {
-      setTimeout(() => setHovering(true), 1000);
+      setTimeout(() => setHovering(true), 250);
     }
     if (bool == false) {
-      setTimeout(() => setHovering(false), 1000);
+      setTimeout(() => setHovering(false), 250);
     }
   });
 
