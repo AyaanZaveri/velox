@@ -158,6 +158,37 @@ const Home = () => {
       time,
       setTimeBool
     );
+
+    createRect(
+      1080 - 250 + 100,
+      100,
+      100,
+      100,
+      results,
+      canvasCtx,
+      canvasElement,
+      "right",
+      "rgb(34, 197, 94, 0.75)",
+      30,
+      "on",
+      time,
+      setTimeBool
+    );
+    createRect(
+      1080 - 100 + 100,
+      100,
+      100,
+      100,
+      results,
+      canvasCtx,
+      canvasElement,
+      "right",
+      "rgb(239, 68, 68, 0.75)",
+      30,
+      "off",
+      time,
+      setTimeBool
+    );
   };
 
   useEffect(() => {
