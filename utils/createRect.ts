@@ -13,7 +13,6 @@ export const createRect = (
   setBool: any
 ) => {
   canvasCtx.fillStyle = "rgb(15, 23, 42, 0.75)";
-  canvasCtx.filter = 'blur(30px)'
   if (hand == "left") {
     if (results?.leftHandLandmarks) {
       if (
