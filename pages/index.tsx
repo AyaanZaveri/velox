@@ -33,9 +33,8 @@ const Home = () => {
 
   const [predictions, setPredictions] = useState<any>();
   const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
-  const [bool, setBool] = useState<boolean>(false);
-  const [hovering, setHovering] = useState<boolean>(false);
-  const [time, setTime] = useState();
+  const [time, setTime] = useState<boolean>(false);
+  const [timeBool, setTimeBool] = useState<boolean>(false);
 
   const onResults = async (results: any) => {
     setPredictions(results ? results : "");
@@ -127,6 +126,8 @@ const Home = () => {
       drawLine(results, canvasCtx, canvasElement, "both", 4, 16, 5, "white");
       drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
     }
+
+    // for checking time
     createRect(
       100,
       100,
@@ -139,8 +140,8 @@ const Home = () => {
       "rgb(34, 197, 94, 0.75)",
       30,
       "on",
-      hovering,
-      setBool
+      time,
+      setTimeBool
     );
     createRect(
       250,
@@ -154,17 +155,17 @@ const Home = () => {
       "rgb(239, 68, 68, 0.75)",
       30,
       "off",
-      hovering,
-      setBool
+      time,
+      setTimeBool
     );
   };
 
   useEffect(() => {
-    if (bool == true) {
-      setTimeout(() => setHovering(true), 250);
+    if (timeBool == true) {
+      setTimeout(() => setTime(true), 250);
     }
-    if (bool == false) {
-      setTimeout(() => setHovering(false), 250);
+    if (timeBool == false) {
+      setTimeout(() => setTime(false), 250);
     }
   });
 
@@ -218,7 +219,7 @@ const Home = () => {
           height: "100vh",
         }}
       />
-      {hovering ? (
+      {time ? (
         <h1 className="absolute text-3xl text-white bg-slate-900/30 p-3 rounded-lg backdrop-blur-md font-light">
           <span className="font-semibold">
             {new Date().toLocaleTimeString()}
