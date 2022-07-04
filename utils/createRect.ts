@@ -4,7 +4,7 @@ export const createRect = (
   width: number,
   height: number,
   results: any,
-  canvasCtx: any,
+  ctx: any,
   canvasElement: any,
   hand = "left",
   color = "red",
@@ -13,7 +13,7 @@ export const createRect = (
   hovering: boolean,
   setBool: any
 ) => {
-  canvasCtx.fillStyle = "rgb(15, 23, 42, 0.75)";
+  ctx.fillStyle = "rgb(15, 23, 42, 0.75)";
   if (hand == "left") {
     if (results?.leftHandLandmarks) {
       if (
@@ -33,13 +33,16 @@ export const createRect = (
         } else if (onoff == "off") {
           setBool(false);
         }
-        canvasCtx.fillStyle = color;
+        ctx.fillStyle = color;
       }
     }
 
-    canvasCtx?.fillRect(1080 - x + width, y, width, height);
+    ctx.beginPath();
+    ctx.arc(1080 - x + width, y, width, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.fill();
 
-    canvasCtx?.restore();
+    ctx?.restore();
   }
 
   if (hand == "right") {
@@ -61,11 +64,11 @@ export const createRect = (
         } else if (onoff == "off") {
           setBool(false);
         }
-        canvasCtx.fillStyle = color;
+        ctx.fillStyle = color;
       }
     }
-    canvasCtx?.fillRect(1080 - x + width, y, width, height);
+    ctx?.fillRect(1080 - x + width, y, width, height);
 
-    canvasCtx?.restore();
+    ctx?.restore();
   }
 };

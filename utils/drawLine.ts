@@ -1,6 +1,6 @@
 export const drawLine = (
   results: any,
-  canvasCtx: any,
+  ctx: any,
   canvasElement: any,
   hand = "both",
   idx1: number,
@@ -16,12 +16,12 @@ export const drawLine = (
       ? results.rightHandLandmarks[idx2]
       : 0;
 
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(x1 * canvasElement.width, y1 * canvasElement.height);
-    canvasCtx.lineTo(x2 * canvasElement.width, y2 * canvasElement.height);
-    canvasCtx.lineWidth = lineWidth;
-    canvasCtx.strokeStyle = strokeColor;
-    canvasCtx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x1 * canvasElement.width, y1 * canvasElement.height);
+    ctx.lineTo(x2 * canvasElement.width, y2 * canvasElement.height);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
   } else if (hand == "left") {
     const { x: x1, y: y1 } = results.leftHandLandmarks
       ? results.leftHandLandmarks[idx1]
@@ -30,12 +30,12 @@ export const drawLine = (
       ? results.leftHandLandmarks[idx2]
       : 0;
 
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(x1 * canvasElement.width, y1 * canvasElement.height);
-    canvasCtx.lineTo(x2 * canvasElement.width, y2 * canvasElement.height);
-    canvasCtx.lineWidth = lineWidth;
-    canvasCtx.strokeStyle = strokeColor;
-    canvasCtx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x1 * canvasElement.width, y1 * canvasElement.height);
+    ctx.lineTo(x2 * canvasElement.width, y2 * canvasElement.height);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
   } else {
     const { x: x1, y: y1 } = results.rightHandLandmarks
       ? results.rightHandLandmarks[idx1]
@@ -50,13 +50,13 @@ export const drawLine = (
       ? results.leftHandLandmarks[idx2]
       : 0;
 
-    canvasCtx.beginPath();
-    canvasCtx.moveTo(x1 * canvasElement.width, y1 * canvasElement.height);
-    canvasCtx.lineTo(x2 * canvasElement.width, y2 * canvasElement.height);
-    canvasCtx.moveTo(x3 * canvasElement.width, y3 * canvasElement.height);
-    canvasCtx.lineTo(x4 * canvasElement.width, y4 * canvasElement.height);
-    canvasCtx.lineWidth = lineWidth;
-    canvasCtx.strokeStyle = strokeColor;
-    canvasCtx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x1 * canvasElement.width, y1 * canvasElement.height);
+    ctx.lineTo(x2 * canvasElement.width, y2 * canvasElement.height);
+    ctx.moveTo(x3 * canvasElement.width, y3 * canvasElement.height);
+    ctx.lineTo(x4 * canvasElement.width, y4 * canvasElement.height);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
   }
 };

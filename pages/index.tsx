@@ -40,15 +40,15 @@ const Home = () => {
     setPredictions(results ? results : "");
 
     const canvasElement = canvasRef.current;
-    const canvasCtx = canvasElement.getContext("2d");
+    const ctx = canvasElement.getContext("2d");
 
     canvasElement.width = webcamRef.current.video.videoWidth;
     canvasElement.height = webcamRef.current.video.videoHeight;
 
-    canvasCtx.save();
+    ctx.save();
 
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(
+    ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    ctx.drawImage(
       results.image,
       0,
       0,
@@ -63,18 +63,18 @@ const Home = () => {
       ) {
         // Pose
 
-        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+        drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, {
           color: "white",
         });
         drawLandmarks(
-          canvasCtx,
+          ctx,
           Object.values(POSE_LANDMARKS_LEFT).map(
             (index) => results.poseLandmarks[index]
           ),
           { visibilityMin: 0.65, color: "white", fillColor: "rgb(255,138,0)" }
         );
         drawLandmarks(
-          canvasCtx,
+          ctx,
           Object.values(POSE_LANDMARKS_RIGHT).map(
             (index) => results.poseLandmarks[index]
           ),
@@ -83,18 +83,18 @@ const Home = () => {
 
         // Face
 
-        // drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_TESSELATION, {
+        // drawConnectors(ctx, results.faceLandmarks, FACEMESH_TESSELATION, {
         //   color: "#C0C0C070",
         //   lineWidth: 1,
         // });
 
         // Hands
 
-        drawConnectors(canvasCtx, results.leftHandLandmarks, HAND_CONNECTIONS, {
+        drawConnectors(ctx, results.leftHandLandmarks, HAND_CONNECTIONS, {
           color: "white",
           lineWidth: 5,
         });
-        drawLandmarks(canvasCtx, results.leftHandLandmarks, {
+        drawLandmarks(ctx, results.leftHandLandmarks, {
           color: "white",
           fillColor: "rgb(255,138,0)",
           lineWidth: 2,
@@ -103,7 +103,7 @@ const Home = () => {
           },
         });
         drawConnectors(
-          canvasCtx,
+          ctx,
           results.rightHandLandmarks,
           HAND_CONNECTIONS,
           {
@@ -111,7 +111,7 @@ const Home = () => {
             lineWidth: 5,
           }
         );
-        drawLandmarks(canvasCtx, results.rightHandLandmarks, {
+        drawLandmarks(ctx, results.rightHandLandmarks, {
           color: "white",
           fillColor: "rgb(0,217,231)",
           lineWidth: 2,
@@ -121,10 +121,10 @@ const Home = () => {
         });
       }
 
-      drawLine(results, canvasCtx, canvasElement, "both", 4, 8, 5, "white");
-      drawLine(results, canvasCtx, canvasElement, "both", 4, 12, 5, "white");
-      drawLine(results, canvasCtx, canvasElement, "both", 4, 16, 5, "white");
-      drawLine(results, canvasCtx, canvasElement, "both", 4, 20, 5, "white");
+      drawLine(results, ctx, canvasElement, "both", 4, 8, 5, "white");
+      drawLine(results, ctx, canvasElement, "both", 4, 12, 5, "white");
+      drawLine(results, ctx, canvasElement, "both", 4, 16, 5, "white");
+      drawLine(results, ctx, canvasElement, "both", 4, 20, 5, "white");
     }
 
     // for checking time
@@ -134,7 +134,7 @@ const Home = () => {
       100,
       100,
       results,
-      canvasCtx,
+      ctx,
       canvasElement,
       "left",
       "rgb(34, 197, 94, 0.75)",
@@ -149,7 +149,7 @@ const Home = () => {
       100,
       100,
       results,
-      canvasCtx,
+      ctx,
       canvasElement,
       "left",
       "rgb(239, 68, 68, 0.75)",
@@ -165,7 +165,7 @@ const Home = () => {
       100,
       100,
       results,
-      canvasCtx,
+      ctx,
       canvasElement,
       "right",
       "rgb(34, 197, 94, 0.75)",
@@ -180,7 +180,7 @@ const Home = () => {
       100,
       100,
       results,
-      canvasCtx,
+      ctx,
       canvasElement,
       "right",
       "rgb(239, 68, 68, 0.75)",
