@@ -217,8 +217,8 @@ const Home = () => {
         }}
       />
       {hovering ? (
-        <h1 className="absolute text-3xl text-white bg-slate-900/30 p-3 rounded-lg backdrop-blur-md">
-          {new Date().toLocaleTimeString()}
+        <h1 className="absolute text-3xl text-white bg-slate-900/30 p-3 rounded-lg backdrop-blur-md font-light">
+          <span className="font-semibold">{new Date().toLocaleTimeString()}</span> is the time.
         </h1>
       ) : null}
     </div>
