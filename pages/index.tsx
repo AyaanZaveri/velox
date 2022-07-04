@@ -32,7 +32,7 @@ const Home = () => {
   const canvasRef = useRef<any>(null);
 
   const [predictions, setPredictions] = useState<any>();
-  const [showLandmarks, setShowLandmarks] = useState<boolean>(true);
+  const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
   const [bool, setBool] = useState<boolean>(false);
   const [hovering, setHovering] = useState<boolean>(false);
   const [time, setTime] = useState();
