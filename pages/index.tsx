@@ -38,7 +38,8 @@ const Home = () => {
   const [sqWidth, setSqWidth] = useState<any>();
   const [sqHeight, setSqHeight] = useState<any>();
 
-  const timeRef = useRef<any>(null);
+  const timeOnRef = useRef<any>(null);
+  const timeOffRef = useRef<any>(null);
 
   // console.log(
   //   timeRef.current?.offsetWidth,
@@ -133,67 +134,35 @@ const Home = () => {
     }
 
     // console.log(
-    //   results.leftHandLandmarks ? results.leftHandLandmarks[8] : null
+    //   results?.leftHandLandmarks
+    //     ? `${
+    //         canvasRef.current.offsetHeight * results?.leftHandLandmarks[8]?.y
+    //       } ${timeOnRef.current?.offsetTop} ${
+    //         timeOnRef.current?.offsetTop + timeOnRef.current?.offsetWidth
+    //       }`
+    //     : ""
     // );
 
-    // For checking the time
-    createRect(
-      timeRef.current ? timeRef.current?.offsetLeft : 0,
-      timeRef.current ? timeRef.current?.offsetTop : 0,
-      timeRef.current ? timeRef.current?.offsetWidth : 0,
-      timeRef.current ? timeRef.current?.offsetWidth : 0,
-      results,
-      ctx,
-      canvasElement,
-      "left",
-      30,
-      "on",
-      time,
-      setTimeBool
-    );
-    createRect(
-      timeRef.current ? timeRef.current?.offsetLeft + 120 : 0,
-      timeRef.current ? timeRef.current?.offsetTop : 0,
-      timeRef.current ? timeRef.current?.offsetWidth : 0,
-      timeRef.current ? timeRef.current?.offsetWidth : 0,
-      results,
-      ctx,
-      canvasElement,
-      "right",
-      30,
-      "off",
-      time,
-      setTimeBool
-    );
-
-    // createRect(
-    //   timeRef.current ? timeRef.current?.offsetWidth : 0,
-    //   100,
-    //   100,
-    //   100,
-    //   results,
-    //   ctx,
-    //   canvasElement,
-    //   "right",
-    //   30,
-    //   "on",
-    //   time,
-    //   setTimeBool
-    // );
-    // createRect(
-    //   timeRef.current ? timeRef.current?.offsetWidth : 0,
-    //   100,
-    //   100,
-    //   100,
-    //   results,
-    //   ctx,
-    //   canvasElement,
-    //   "right",
-    //   30,
-    //   "off",
-    //   time,
-    //   setTimeBool
-    // );
+    if (
+      canvasRef.current.offsetWidth -
+        canvasRef.current.offsetWidth *
+          (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].x : 0) >=
+        timeOnRef.current?.offsetLeft &&
+      canvasRef.current.offsetWidth -
+        canvasRef.current.offsetWidth *
+          (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].x : 0) <=
+        timeOnRef.current?.offsetLeft + timeOnRef.current?.offsetWidth &&
+      canvasRef.current.offsetHeight *
+        (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].y : 0) >=
+        timeOnRef.current?.offsetTop &&
+      canvasRef.current.offsetHeight *
+        (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].y : 0) <=
+        timeOnRef.current?.offsetTop + timeOnRef.current?.offsetWidth
+    ) {
+      console.log(true);
+    } else {
+      console.log(false);
+    }
   };
 
   useEffect(() => {
@@ -263,7 +232,7 @@ const Home = () => {
         />
         <div className="flex flex-row gap-12">
           <div
-            ref={timeRef}
+            ref={timeOnRef}
             className={`${
               time ? "bg-green-500/30" : "bg-slate-900/30"
             } backdrop-blur-md rounded-lg absolute`}
@@ -279,7 +248,7 @@ const Home = () => {
             }}
           ></div>
           <div
-            ref={timeRef}
+            ref={timeOffRef}
             className={`${
               time ? "bg-slate-900/30" : "bg-red-500/30"
             } backdrop-blur-md rounded-lg absolute`}
