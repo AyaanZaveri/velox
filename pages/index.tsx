@@ -18,7 +18,6 @@ import {
 } from "@mediapipe/holistic";
 import { drawLine } from "../utils/drawLine";
 import Head from "next/head";
-import { createRect } from "../utils/createRect";
 import axios from "axios";
 
 const videoConstraints = {
