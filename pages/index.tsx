@@ -31,13 +31,19 @@ const Home = () => {
   const canvasRef = useRef<any>(null);
 
   const [predictions, setPredictions] = useState<any>();
+
   const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
-  const [time, setTime] = useState<boolean>(false);
-  const [timeBool, setTimeBool] = useState<boolean>(false);
+
   const [sqWidth, setSqWidth] = useState<any>();
   const [sqHeight, setSqHeight] = useState<any>();
 
+  const [time, setTime] = useState<boolean>(false);
+  const [timeBool, setTimeBool] = useState<boolean>(false);
+  const [weather, setWeather] = useState<boolean>(false);
+  const [weatherBool, setWeatherBool] = useState<boolean>(false);
+
   const timeRef = useRef<HTMLDivElement>(null);
+  const weatherRef = useRef<HTMLDivElement>(null);
 
   // console.log(
   //   timeRef.current?.offsetWidth,
@@ -141,7 +147,11 @@ const Home = () => {
     //     : ""
     // );
 
-    const detectRect = (ref: React.RefObject<HTMLElement>, hand: string) => {
+    const detectRect = (
+      ref: React.RefObject<HTMLElement>,
+      hand: string,
+      setBool: any
+    ) => {
       if (ref.current) {
         if (hand == "left") {
           if (
@@ -168,9 +178,9 @@ const Home = () => {
                 : 0) <=
               ref.current?.offsetTop + ref.current?.offsetWidth
           ) {
-            setTimeBool(true);
+            setBool(true);
           } else {
-            setTimeBool(false);
+            setBool(false);
           }
         } else if (hand == "right") {
           if (
@@ -197,20 +207,24 @@ const Home = () => {
                 : 0) <=
               ref.current?.offsetTop + ref.current?.offsetWidth
           ) {
-            setTimeBool(true);
+            setBool(true);
           } else {
-            setTimeBool(false);
+            setBool(false);
           }
         }
       }
     };
 
-    detectRect(timeRef, "left");
+    detectRect(timeRef, "left", setTimeBool);
+    detectRect(weatherRef, "left", setWeatherBool);
   };
 
   useEffect(() => {
     if (timeBool == true) {
       setTimeout(() => setTime(!time), 500);
+    }
+        if (weatherBool == true) {
+      setTimeout(() => setWeather(!weather), 500);
     }
   });
 
@@ -288,7 +302,26 @@ const Home = () => {
                   : 0,
               }}
             >
-              <span className="text-xl text-white/75">Time</span>
+              <span className="text-lg text-white/75 font-mono">Time</span>
+            </div>
+
+            <div
+              ref={weatherRef}
+              className={`${
+                weather ? "bg-green-500/10" : "bg-red-900/10"
+              } backdrop-blur-md rounded-full absolute grid place-items-center`}
+              style={{
+                width: sqWidth,
+                height: sqHeight,
+                top: canvasRef.current
+                  ? (canvasRef.current.offsetWidth / 100) * 8
+                  : 0,
+                left: canvasRef.current
+                  ? (canvasRef.current.offsetWidth / 100) * 20
+                  : 0,
+              }}
+            >
+              <span className="text-lg text-white/75 font-mono">Weather</span>
             </div>
           </div>
         ) : null}
