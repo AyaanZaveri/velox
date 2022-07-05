@@ -143,6 +143,7 @@ const Home = () => {
     //     : ""
     // );
 
+    const detectRect = () => {};
     if (
       canvasRef.current.offsetWidth -
         canvasRef.current.offsetWidth *
@@ -167,10 +168,7 @@ const Home = () => {
 
   useEffect(() => {
     if (timeBool == true) {
-      setTimeout(() => setTime(true), 250);
-    }
-    if (timeBool == false) {
-      setTimeout(() => setTime(false), 250);
+      setTimeout(() => setTime(!time), 500);
     }
   });
 
@@ -230,40 +228,28 @@ const Home = () => {
             height: "100vh",
           }}
         />
-        <div className="flex flex-row gap-12">
-          <div
-            ref={timeOnRef}
-            className={`${
-              time ? "bg-green-500/30" : "bg-slate-900/30"
-            } backdrop-blur-md rounded-lg absolute`}
-            style={{
-              width: sqWidth,
-              height: sqHeight,
-              top: canvasRef.current
-                ? (canvasRef.current.offsetWidth / 100) * 8
-                : 0,
-              left: canvasRef.current
-                ? (canvasRef.current.offsetWidth / 100) * 8
-                : 0,
-            }}
-          ></div>
-          <div
-            ref={timeOffRef}
-            className={`${
-              time ? "bg-slate-900/30" : "bg-red-500/30"
-            } backdrop-blur-md rounded-lg absolute`}
-            style={{
-              width: sqWidth,
-              height: sqHeight,
-              top: canvasRef.current
-                ? (canvasRef.current.offsetWidth / 100) * 8
-                : 0,
-              left: canvasRef.current
-                ? (canvasRef.current.offsetWidth / 100) * 24
-                : 0,
-            }}
-          ></div>
-        </div>
+        {canvasRef.current ? (
+          <div className="flex flex-row">
+            <div
+              ref={timeOnRef}
+              className={`${
+                time ? "bg-green-500/10" : "bg-red-900/10"
+              } backdrop-blur-md rounded-full absolute grid place-items-center`}
+              style={{
+                width: sqWidth,
+                height: sqHeight,
+                top: canvasRef.current
+                  ? (canvasRef.current.offsetWidth / 100) * 8
+                  : 0,
+                left: canvasRef.current
+                  ? (canvasRef.current.offsetWidth / 100) * 8
+                  : 0,
+              }}
+            >
+              <span className="text-xl text-white/75">Time</span>
+            </div>
+          </div>
+        ) : null}
       </div>
       {time ? (
         <h1 className="absolute text-3xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
