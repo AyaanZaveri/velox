@@ -7,13 +7,11 @@ export const createRect = (
   ctx: any,
   canvasElement: any,
   hand = "left",
-  color = "red",
   offset = 30,
   onoff: string,
   hovering: boolean,
   setBool: any
 ) => {
-  ctx.fillStyle = "rgb(15, 23, 42, 0.75)";
   if (hand == "left") {
     if (results?.leftHandLandmarks) {
       if (
@@ -33,14 +31,10 @@ export const createRect = (
         } else if (onoff == "off") {
           setBool(false);
         }
-        ctx.fillStyle = color;
+        // ctx.fillStyle = color;
       }
     }
-
-    ctx.beginPath();
-    ctx.arc(1080 - x + width, y, width, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.fill();
+    ctx.fillRect(1080 - x, y, width, height);
 
     ctx?.restore();
   }
@@ -64,10 +58,11 @@ export const createRect = (
         } else if (onoff == "off") {
           setBool(false);
         }
-        ctx.fillStyle = color;
+        // ctx.fillStyle = color;
       }
     }
-    ctx?.fillRect(1080 - x + width, y, width, height);
+
+    ctx.fillRect(1080 - x, y, width, height);
 
     ctx?.restore();
   }

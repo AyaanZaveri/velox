@@ -35,6 +35,16 @@ const Home = () => {
   const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
   const [time, setTime] = useState<boolean>(false);
   const [timeBool, setTimeBool] = useState<boolean>(false);
+  const [sqWidth, setSqWidth] = useState<any>();
+  const [sqHeight, setSqHeight] = useState<any>();
+
+  const timeRef = useRef<any>(null);
+
+  // console.log(
+  //   timeRef.current?.offsetWidth,
+  //   timeRef.current?.offsetTop,
+  //   timeRef.current?.offsetLeft
+  // );
 
   const onResults = async (results: any) => {
     setPredictions(results ? results : "");
@@ -102,15 +112,10 @@ const Home = () => {
             return lerp(data.from.z, -0.15, 0.1, 10, 1);
           },
         });
-        drawConnectors(
-          ctx,
-          results.rightHandLandmarks,
-          HAND_CONNECTIONS,
-          {
-            color: "white",
-            lineWidth: 5,
-          }
-        );
+        drawConnectors(ctx, results.rightHandLandmarks, HAND_CONNECTIONS, {
+          color: "white",
+          lineWidth: 5,
+        });
         drawLandmarks(ctx, results.rightHandLandmarks, {
           color: "white",
           fillColor: "rgb(0,217,231)",
@@ -127,68 +132,68 @@ const Home = () => {
       drawLine(results, ctx, canvasElement, "both", 4, 20, 5, "white");
     }
 
-    // for checking time
+    // console.log(
+    //   results.leftHandLandmarks ? results.leftHandLandmarks[8] : null
+    // );
+
+    // For checking the time
     createRect(
-      100,
-      100,
-      100,
-      100,
+      timeRef.current ? timeRef.current?.offsetLeft : 0,
+      timeRef.current ? timeRef.current?.offsetTop : 0,
+      timeRef.current ? timeRef.current?.offsetWidth : 0,
+      timeRef.current ? timeRef.current?.offsetWidth : 0,
       results,
       ctx,
       canvasElement,
       "left",
-      "rgb(34, 197, 94, 0.75)",
       30,
       "on",
       time,
       setTimeBool
     );
     createRect(
-      250,
-      100,
-      100,
-      100,
+      timeRef.current ? timeRef.current?.offsetLeft + 120 : 0,
+      timeRef.current ? timeRef.current?.offsetTop : 0,
+      timeRef.current ? timeRef.current?.offsetWidth : 0,
+      timeRef.current ? timeRef.current?.offsetWidth : 0,
       results,
       ctx,
       canvasElement,
-      "left",
-      "rgb(239, 68, 68, 0.75)",
+      "right",
       30,
       "off",
       time,
       setTimeBool
     );
 
-    createRect(
-      1080 - 250 + 100,
-      100,
-      100,
-      100,
-      results,
-      ctx,
-      canvasElement,
-      "right",
-      "rgb(34, 197, 94, 0.75)",
-      30,
-      "on",
-      time,
-      setTimeBool
-    );
-    createRect(
-      1080 - 100 + 100,
-      100,
-      100,
-      100,
-      results,
-      ctx,
-      canvasElement,
-      "right",
-      "rgb(239, 68, 68, 0.75)",
-      30,
-      "off",
-      time,
-      setTimeBool
-    );
+    // createRect(
+    //   timeRef.current ? timeRef.current?.offsetWidth : 0,
+    //   100,
+    //   100,
+    //   100,
+    //   results,
+    //   ctx,
+    //   canvasElement,
+    //   "right",
+    //   30,
+    //   "on",
+    //   time,
+    //   setTimeBool
+    // );
+    // createRect(
+    //   timeRef.current ? timeRef.current?.offsetWidth : 0,
+    //   100,
+    //   100,
+    //   100,
+    //   results,
+    //   ctx,
+    //   canvasElement,
+    //   "right",
+    //   30,
+    //   "off",
+    //   time,
+    //   setTimeBool
+    // );
   };
 
   useEffect(() => {
@@ -234,6 +239,11 @@ const Home = () => {
     loadModel();
   }, []);
 
+  useEffect(() => {
+    setSqWidth(canvasRef.current ? canvasRef.current.offsetWidth / 12 : 0);
+    setSqHeight(canvasRef.current ? canvasRef.current.offsetWidth / 12 : 0);
+  });
+
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
       <Webcam
@@ -242,16 +252,52 @@ const Home = () => {
         mirrored={true}
         videoConstraints={videoConstraints}
       />
-      <canvas
-        ref={canvasRef}
-        className=""
-        style={{
-          transform: "scaleX(-1)",
-          height: "100vh",
-        }}
-      />
+      <div className="absolute h-screen">
+        <canvas
+          ref={canvasRef}
+          className="-z-10"
+          style={{
+            transform: "scaleX(-1)",
+            height: "100vh",
+          }}
+        />
+        <div className="flex flex-row gap-12">
+          <div
+            ref={timeRef}
+            className={`${
+              time ? "bg-green-500/30" : "bg-slate-900/30"
+            } backdrop-blur-md rounded-lg absolute`}
+            style={{
+              width: sqWidth,
+              height: sqHeight,
+              top: canvasRef.current
+                ? (canvasRef.current.offsetWidth / 100) * 8
+                : 0,
+              left: canvasRef.current
+                ? (canvasRef.current.offsetWidth / 100) * 8
+                : 0,
+            }}
+          ></div>
+          <div
+            ref={timeRef}
+            className={`${
+              time ? "bg-slate-900/30" : "bg-red-500/30"
+            } backdrop-blur-md rounded-lg absolute`}
+            style={{
+              width: sqWidth,
+              height: sqHeight,
+              top: canvasRef.current
+                ? (canvasRef.current.offsetWidth / 100) * 8
+                : 0,
+              left: canvasRef.current
+                ? (canvasRef.current.offsetWidth / 100) * 24
+                : 0,
+            }}
+          ></div>
+        </div>
+      </div>
       {time ? (
-        <h1 className="absolute text-3xl text-white bg-slate-900/30 p-3 rounded-lg backdrop-blur-md font-light">
+        <h1 className="absolute text-3xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
           <span className="font-semibold">
             {new Date().toLocaleTimeString()}
           </span>{" "}
