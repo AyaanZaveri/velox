@@ -159,9 +159,9 @@ const Home = () => {
         (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].y : 0) <=
         timeOnRef.current?.offsetTop + timeOnRef.current?.offsetWidth
     ) {
-      console.log(true);
+      setTimeBool(true);
     } else {
-      console.log(false);
+      setTimeBool(false);
     }
   };
 
