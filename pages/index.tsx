@@ -166,7 +166,7 @@ const Home = () => {
                 (results?.leftHandLandmarks
                   ? results?.leftHandLandmarks[8].x
                   : 0) <=
-              ref.current?.offsetLeft + ref.current?.offsetWidth &&
+              ref.current?.offsetLeft + ref.current?.offsetHeight &&
             canvasRef.current.offsetHeight *
               (results?.leftHandLandmarks
                 ? results?.leftHandLandmarks[8].y
@@ -176,7 +176,7 @@ const Home = () => {
               (results?.leftHandLandmarks
                 ? results?.leftHandLandmarks[8].y
                 : 0) <=
-              ref.current?.offsetTop + ref.current?.offsetWidth
+              ref.current?.offsetTop + ref.current?.offsetHeight
           ) {
             setBool(true);
           } else {
@@ -223,7 +223,7 @@ const Home = () => {
     if (timeBool == true) {
       setTimeout(() => setTime(!time), 500);
     }
-        if (weatherBool == true) {
+    if (weatherBool == true) {
       setTimeout(() => setWeather(!weather), 500);
     }
   });
@@ -264,7 +264,7 @@ const Home = () => {
 
   useEffect(() => {
     setSqWidth(canvasRef.current ? canvasRef.current.offsetWidth / 12 : 0);
-    setSqHeight(canvasRef.current ? canvasRef.current.offsetWidth / 12 : 0);
+    setSqHeight(canvasRef.current ? canvasRef.current.offsetHeight / 12 : 0);
   });
 
   return (
@@ -295,7 +295,7 @@ const Home = () => {
                 width: sqWidth,
                 height: sqHeight,
                 top: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 8
+                  ? (canvasRef.current.offsetHeight / 100) * 8
                   : 0,
                 left: canvasRef.current
                   ? (canvasRef.current.offsetWidth / 100) * 8
@@ -314,7 +314,7 @@ const Home = () => {
                 width: sqWidth,
                 height: sqHeight,
                 top: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 8
+                  ? (canvasRef.current.offsetHeight / 100) * 8
                   : 0,
                 left: canvasRef.current
                   ? (canvasRef.current.offsetWidth / 100) * 20
