@@ -37,8 +37,7 @@ const Home = () => {
   const [sqWidth, setSqWidth] = useState<any>();
   const [sqHeight, setSqHeight] = useState<any>();
 
-  const timeOnRef = useRef<any>(null);
-  const timeOffRef = useRef<any>(null);
+  const timeRef = useRef<HTMLDivElement>(null);
 
   // console.log(
   //   timeRef.current?.offsetWidth,
@@ -136,33 +135,77 @@ const Home = () => {
     //   results?.leftHandLandmarks
     //     ? `${
     //         canvasRef.current.offsetHeight * results?.leftHandLandmarks[8]?.y
-    //       } ${timeOnRef.current?.offsetTop} ${
-    //         timeOnRef.current?.offsetTop + timeOnRef.current?.offsetWidth
+    //       } ${timeRef.current?.offsetTop} ${
+    //         timeRef.current?.offsetTop + timeRef.current?.offsetWidth
     //       }`
     //     : ""
     // );
 
-    const detectRect = () => {};
-    if (
-      canvasRef.current.offsetWidth -
-        canvasRef.current.offsetWidth *
-          (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].x : 0) >=
-        timeOnRef.current?.offsetLeft &&
-      canvasRef.current.offsetWidth -
-        canvasRef.current.offsetWidth *
-          (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].x : 0) <=
-        timeOnRef.current?.offsetLeft + timeOnRef.current?.offsetWidth &&
-      canvasRef.current.offsetHeight *
-        (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].y : 0) >=
-        timeOnRef.current?.offsetTop &&
-      canvasRef.current.offsetHeight *
-        (results?.leftHandLandmarks ? results?.leftHandLandmarks[8].y : 0) <=
-        timeOnRef.current?.offsetTop + timeOnRef.current?.offsetWidth
-    ) {
-      setTimeBool(true);
-    } else {
-      setTimeBool(false);
-    }
+    const detectRect = (ref: React.RefObject<HTMLElement>, hand: string) => {
+      if (ref.current) {
+        if (hand == "left") {
+          if (
+            canvasRef.current.offsetWidth -
+              canvasRef.current.offsetWidth *
+                (results?.leftHandLandmarks
+                  ? results?.leftHandLandmarks[8].x
+                  : 0) >=
+              ref.current?.offsetLeft &&
+            canvasRef.current.offsetWidth -
+              canvasRef.current.offsetWidth *
+                (results?.leftHandLandmarks
+                  ? results?.leftHandLandmarks[8].x
+                  : 0) <=
+              ref.current?.offsetLeft + ref.current?.offsetWidth &&
+            canvasRef.current.offsetHeight *
+              (results?.leftHandLandmarks
+                ? results?.leftHandLandmarks[8].y
+                : 0) >=
+              ref.current?.offsetTop &&
+            canvasRef.current.offsetHeight *
+              (results?.leftHandLandmarks
+                ? results?.leftHandLandmarks[8].y
+                : 0) <=
+              ref.current?.offsetTop + ref.current?.offsetWidth
+          ) {
+            setTimeBool(true);
+          } else {
+            setTimeBool(false);
+          }
+        } else if (hand == "right") {
+          if (
+            canvasRef.current.offsetWidth -
+              canvasRef.current.offsetWidth *
+                (results?.rightHandLandmarks
+                  ? results?.rightHandLandmarks[8].x
+                  : 0) >=
+              ref.current?.offsetLeft &&
+            canvasRef.current.offsetWidth -
+              canvasRef.current.offsetWidth *
+                (results?.rightHandLandmarks
+                  ? results?.rightHandLandmarks[8].x
+                  : 0) <=
+              ref.current?.offsetLeft + ref.current?.offsetWidth &&
+            canvasRef.current.offsetHeight *
+              (results?.rightHandLandmarks
+                ? results?.rightHandLandmarks[8].y
+                : 0) >=
+              ref.current?.offsetTop &&
+            canvasRef.current.offsetHeight *
+              (results?.rightHandLandmarks
+                ? results?.rightHandLandmarks[8].y
+                : 0) <=
+              ref.current?.offsetTop + ref.current?.offsetWidth
+          ) {
+            setTimeBool(true);
+          } else {
+            setTimeBool(false);
+          }
+        }
+      }
+    };
+
+    detectRect(timeRef, "left");
   };
 
   useEffect(() => {
@@ -230,7 +273,7 @@ const Home = () => {
         {canvasRef.current ? (
           <div className="flex flex-row">
             <div
-              ref={timeOnRef}
+              ref={timeRef}
               className={`${
                 time ? "bg-green-500/10" : "bg-red-900/10"
               } backdrop-blur-md rounded-full absolute grid place-items-center`}
