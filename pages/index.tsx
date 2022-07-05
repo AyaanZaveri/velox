@@ -221,10 +221,10 @@ const Home = () => {
 
   useEffect(() => {
     if (timeBool == true) {
-      setTimeout(() => setTime(!time), 500);
+      setTimeout(() => setTime(!time), 300);
     }
     if (weatherBool == true) {
-      setTimeout(() => setWeather(!weather), 500);
+      setTimeout(() => setWeather(!weather), 300);
     }
   });
 
@@ -290,15 +290,15 @@ const Home = () => {
               ref={timeRef}
               className={`${
                 time ? "bg-green-500/10" : "bg-red-900/10"
-              } backdrop-blur-md rounded-full absolute grid place-items-center`}
+              } backdrop-blur-md rounded-lg absolute grid place-items-center`}
               style={{
                 width: sqWidth,
                 height: sqHeight,
                 top: canvasRef.current
-                  ? (canvasRef.current.offsetHeight / 100) * 8
+                  ? (canvasRef.current.offsetHeight / 100) * 24
                   : 0,
                 left: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 8
+                  ? (canvasRef.current.offsetWidth / 100) * 24
                   : 0,
               }}
             >
@@ -309,15 +309,15 @@ const Home = () => {
               ref={weatherRef}
               className={`${
                 weather ? "bg-green-500/10" : "bg-red-900/10"
-              } backdrop-blur-md rounded-full absolute grid place-items-center`}
+              } backdrop-blur-md rounded-lg absolute grid place-items-center`}
               style={{
                 width: sqWidth,
                 height: sqHeight,
                 top: canvasRef.current
-                  ? (canvasRef.current.offsetHeight / 100) * 8
+                  ? (canvasRef.current.offsetHeight / 100) * 24
                   : 0,
                 left: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 20
+                  ? (canvasRef.current.offsetWidth / 100) * 36
                   : 0,
               }}
             >
@@ -327,7 +327,7 @@ const Home = () => {
         ) : null}
       </div>
       {time ? (
-        <h1 className="absolute text-3xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
+        <h1 className="absolute text-2xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
           <span className="font-semibold">
             {new Date().toLocaleTimeString()}
           </span>{" "}
