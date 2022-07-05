@@ -262,11 +262,6 @@ const Home = () => {
     loadModel();
   }, []);
 
-  useEffect(() => {
-    setSqWidth(canvasRef.current ? canvasRef.current.offsetWidth / 12 : 0);
-    setSqHeight(canvasRef.current ? canvasRef.current.offsetHeight / 12 : 0);
-  });
-
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
       <Webcam
@@ -289,39 +284,49 @@ const Home = () => {
             <div
               ref={timeRef}
               className={`${
-                time ? "bg-green-500/10" : "bg-red-900/10"
+                time ? "bg-slate-500/30" : "bg-slate-900/10"
               } backdrop-blur-md rounded-lg absolute grid place-items-center`}
               style={{
-                width: sqWidth,
-                height: sqHeight,
+                width: canvasRef.current
+                  ? canvasRef.current.offsetWidth / 10
+                  : 0,
+                height: canvasRef.current
+                  ? canvasRef.current.offsetHeight / 10
+                  : 0,
                 top: canvasRef.current
                   ? (canvasRef.current.offsetHeight / 100) * 24
                   : 0,
                 left: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 24
+                  ? (canvasRef.current.offsetWidth / 100) * 10
                   : 0,
               }}
             >
-              <span className="text-lg text-white/75 font-mono">Time</span>
+              <span className="text-lg text-white/75">
+                {new Date().toLocaleTimeString()}
+              </span>
             </div>
 
             <div
               ref={weatherRef}
               className={`${
-                weather ? "bg-green-500/10" : "bg-red-900/10"
+                weather ? "bg-slate-500/30" : "bg-slate-900/10"
               } backdrop-blur-md rounded-lg absolute grid place-items-center`}
               style={{
-                width: sqWidth,
-                height: sqHeight,
+                width: canvasRef.current
+                  ? canvasRef.current.offsetWidth / 12
+                  : 0,
+                height: canvasRef.current
+                  ? canvasRef.current.offsetHeight / 10
+                  : 0,
                 top: canvasRef.current
                   ? (canvasRef.current.offsetHeight / 100) * 24
                   : 0,
                 left: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 36
+                  ? (canvasRef.current.offsetWidth / 100) * 22
                   : 0,
               }}
             >
-              <span className="text-lg text-white/75 font-mono">Weather</span>
+              <span className="text-lg text-white/75">Weather</span>
             </div>
           </div>
         ) : null}
