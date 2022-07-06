@@ -278,7 +278,7 @@ const Home = () => {
             transform: "scaleX(-1)",
             height: "100vh",
           }}
-        />
+        ></canvas>
         {canvasRef.current ? (
           <div className="flex flex-row">
             <div
