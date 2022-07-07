@@ -284,7 +284,7 @@ const Home = () => {
             <div
               ref={timeRef}
               className={`${
-                time ? "bg-slate-500/30" : "bg-slate-900/10"
+                time ? "bg-blue-900/30" : "bg-slate-900/20"
               } backdrop-blur-md rounded-lg absolute grid place-items-center`}
               style={{
                 width: canvasRef.current
@@ -309,7 +309,7 @@ const Home = () => {
             <div
               ref={weatherRef}
               className={`${
-                weather ? "bg-slate-500/30" : "bg-slate-900/10"
+                weather ? "bg-blue-900/30" : "bg-slate-900/20"
               } backdrop-blur-md rounded-lg absolute grid place-items-center`}
               style={{
                 width: canvasRef.current
