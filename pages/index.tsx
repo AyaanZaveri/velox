@@ -35,11 +35,11 @@ const Home = () => {
 
   const [sqWidth, setSqWidth] = useState<any>();
   const [sqHeight, setSqHeight] = useState<any>();
-  const [showLandmarks, setShowLandmarks] = useState<any>(false)
+  const [showLandmarks, setShowLandmarks] = useState<any>(false);
 
-  const [time, setTime] = useState<boolean>(false);
+  const [time, setTime] = useState<boolean>(true); // change to false after
   const [timeBool, setTimeBool] = useState<boolean>(false);
-  const [weather, setWeather] = useState<boolean>(false);
+  const [weather, setWeather] = useState<boolean>(true);
   const [weatherBool, setWeatherBool] = useState<boolean>(false);
 
   const timeRef = useRef<HTMLDivElement>(null);
@@ -50,7 +50,6 @@ const Home = () => {
   //   timeRef.current?.offsetTop,
   //   timeRef.current?.offsetLeft
   // );
-
   const onResults = async (results: any) => {
     setPredictions(results ? results : "");
 
@@ -222,14 +221,14 @@ const Home = () => {
     detectRect(weatherRef, "left", setWeatherBool);
   };
 
-  useEffect(() => {
-    if (timeBool == true) {
-      setTimeout(() => setTime(!time), 300);
-    }
-    if (weatherBool == true) {
-      setTimeout(() => setWeather(!weather), 300);
-    }
-  });
+  // useEffect(() => {
+  //   if (timeBool == true) {
+  //     setTimeout(() => setTime(!time), 300);
+  //   }
+  //   if (weatherBool == true) {
+  //     setTimeout(() => setWeather(!weather), 300);
+  //   }
+  // });
 
   const loadModel = async () => {
     const holistic = new Holistic({
@@ -264,6 +263,17 @@ const Home = () => {
   useEffect(() => {
     loadModel();
   }, []);
+
+  const city = "Toronto";
+  const country = "Canada";
+
+  // const getWeather = () => {
+  //   axios
+  //     .get(
+  //       `https://api.openweathermap.org/data/2.5/weather?q=${city}, ${country}&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY}&units=metric`
+  //     )
+  //     .then((res) => setWeatherRes(res.data));
+  // };
 
   return (
     <div className="flex flex-col h-screen items-center justify-center gap-3">
@@ -334,14 +344,24 @@ const Home = () => {
           </div>
         ) : null}
       </div>
-      {time ? (
-        <h1 className="absolute text-2xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
-          <span className="font-semibold">
-            {new Date().toLocaleTimeString()}
-          </span>{" "}
-          is the time.
-        </h1>
-      ) : null}
+      <div className="flex flex-col gap-8 items-center justify-center">
+        {time ? (
+          <h1 className="text-2xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
+            <span suppressHydrationWarning className="font-semibold">
+              {new Date().toLocaleTimeString()}
+            </span>{" "}
+            is the time.
+          </h1>
+        ) : null}
+        {weather ? (
+          <h1 className="text-2xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
+            <span suppressHydrationWarning className="font-semibold">
+              {new Date().toLocaleTimeString()}
+            </span>{" "}
+            is the time.
+          </h1>
+        ) : null}
+      </div>
     </div>
   );
 };
