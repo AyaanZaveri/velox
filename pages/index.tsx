@@ -166,7 +166,7 @@ const Home = () => {
                 (results?.leftHandLandmarks
                   ? results?.leftHandLandmarks[8].x
                   : 0) <=
-              ref.current?.offsetLeft + ref.current?.offsetHeight &&
+              ref.current?.offsetLeft + ref.current?.offsetWidth &&
             canvasRef.current.offsetHeight *
               (results?.leftHandLandmarks
                 ? results?.leftHandLandmarks[8].y
