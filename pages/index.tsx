@@ -19,6 +19,7 @@ import {
 import { drawLine } from "../utils/drawLine";
 import Head from "next/head";
 import axios from "axios";
+import { HiOutlineGlobe } from "react-icons/hi";
 
 const videoConstraints = {
   width: 1280,
@@ -32,10 +33,9 @@ const Home = () => {
 
   const [predictions, setPredictions] = useState<any>();
 
-  const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
-
   const [sqWidth, setSqWidth] = useState<any>();
   const [sqHeight, setSqHeight] = useState<any>();
+  const [showLandmarks, setShowLandmarks] = useState<any>(false)
 
   const [time, setTime] = useState<boolean>(false);
   const [timeBool, setTimeBool] = useState<boolean>(false);
@@ -70,7 +70,7 @@ const Home = () => {
       canvasElement.width,
       canvasElement.height
     );
-    if (showLandmarks) {
+    if (showLandmarks == true) {
       if (
         results.poseLandmarks ||
         results.rightHandLandmarks ||
@@ -147,6 +147,9 @@ const Home = () => {
     //     : ""
     // );
 
+    const canvasWidth = canvasRef.current.offsetWidth;
+    const canvasHeight = canvasRef.current.offsetHeight;
+
     const detectRect = (
       ref: React.RefObject<HTMLElement>,
       hand: string,
@@ -155,24 +158,24 @@ const Home = () => {
       if (ref.current) {
         if (hand == "left") {
           if (
-            canvasRef.current.offsetWidth -
-              canvasRef.current.offsetWidth *
+            canvasWidth -
+              canvasWidth *
                 (results?.leftHandLandmarks
                   ? results?.leftHandLandmarks[8].x
                   : 0) >=
               ref.current?.offsetLeft &&
-            canvasRef.current.offsetWidth -
-              canvasRef.current.offsetWidth *
+            canvasWidth -
+              canvasWidth *
                 (results?.leftHandLandmarks
                   ? results?.leftHandLandmarks[8].x
                   : 0) <=
               ref.current?.offsetLeft + ref.current?.offsetWidth &&
-            canvasRef.current.offsetHeight *
+            canvasHeight *
               (results?.leftHandLandmarks
                 ? results?.leftHandLandmarks[8].y
                 : 0) >=
               ref.current?.offsetTop &&
-            canvasRef.current.offsetHeight *
+            canvasHeight *
               (results?.leftHandLandmarks
                 ? results?.leftHandLandmarks[8].y
                 : 0) <=
@@ -184,24 +187,24 @@ const Home = () => {
           }
         } else if (hand == "right") {
           if (
-            canvasRef.current.offsetWidth -
-              canvasRef.current.offsetWidth *
+            canvasWidth -
+              canvasWidth *
                 (results?.rightHandLandmarks
                   ? results?.rightHandLandmarks[8].x
                   : 0) >=
               ref.current?.offsetLeft &&
-            canvasRef.current.offsetWidth -
-              canvasRef.current.offsetWidth *
+            canvasWidth -
+              canvasWidth *
                 (results?.rightHandLandmarks
                   ? results?.rightHandLandmarks[8].x
                   : 0) <=
               ref.current?.offsetLeft + ref.current?.offsetWidth &&
-            canvasRef.current.offsetHeight *
+            canvasHeight *
               (results?.rightHandLandmarks
                 ? results?.rightHandLandmarks[8].y
                 : 0) >=
               ref.current?.offsetTop &&
-            canvasRef.current.offsetHeight *
+            canvasHeight *
               (results?.rightHandLandmarks
                 ? results?.rightHandLandmarks[8].y
                 : 0) <=
