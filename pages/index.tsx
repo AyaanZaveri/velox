@@ -20,6 +20,8 @@ import { drawLine } from "../utils/drawLine";
 import Head from "next/head";
 import axios from "axios";
 import { HiOutlineGlobe } from "react-icons/hi";
+import Card from "../components/Card";
+import { titleCase } from "title-case";
 
 const videoConstraints = {
   width: 1280,
@@ -37,10 +39,12 @@ const Home = () => {
   const [sqHeight, setSqHeight] = useState<any>();
   const [showLandmarks, setShowLandmarks] = useState<any>(false);
 
-  const [time, setTime] = useState<boolean>(true); // change to false after
+  const [time, setTime] = useState<boolean>(false); // change to false after
   const [timeBool, setTimeBool] = useState<boolean>(false);
-  const [weather, setWeather] = useState<boolean>(true);
+  const [weather, setWeather] = useState<boolean>(false);
   const [weatherBool, setWeatherBool] = useState<boolean>(false);
+
+  const [weatherRes, setWeatherRes] = useState<any>();
 
   const timeRef = useRef<HTMLDivElement>(null);
   const weatherRef = useRef<HTMLDivElement>(null);
@@ -221,14 +225,14 @@ const Home = () => {
     detectRect(weatherRef, "left", setWeatherBool);
   };
 
-  // useEffect(() => {
-  //   if (timeBool == true) {
-  //     setTimeout(() => setTime(!time), 300);
-  //   }
-  //   if (weatherBool == true) {
-  //     setTimeout(() => setWeather(!weather), 300);
-  //   }
-  // });
+  useEffect(() => {
+    if (timeBool == true) {
+      setTimeout(() => setTime(!time), 300);
+    }
+    if (weatherBool == true) {
+      setTimeout(() => setWeather(!weather), 300);
+    }
+  });
 
   const loadModel = async () => {
     const holistic = new Holistic({
@@ -267,22 +271,29 @@ const Home = () => {
   const city = "Toronto";
   const country = "Canada";
 
-  // const getWeather = () => {
-  //   axios
-  //     .get(
-  //       `https://api.openweathermap.org/data/2.5/weather?q=${city}, ${country}&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY}&units=metric`
-  //     )
-  //     .then((res) => setWeatherRes(res.data));
-  // };
+  const getWeather = () => {
+    axios
+      .get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}, ${country}&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY}&units=metric`
+      )
+      .then((res) => setWeatherRes(res.data));
+  };
+
+  useEffect(() => {
+    getWeather();
+  }, []);
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center gap-3">
-      <Webcam
-        ref={webcamRef}
-        className="hidden"
-        mirrored={true}
-        videoConstraints={videoConstraints}
-      />
+    <div className="flex flex-col h-screen items-center justify-center">
+      <div>
+        <Webcam
+          suppressHydrationWarning
+          ref={webcamRef}
+          className="hidden"
+          mirrored={true}
+          videoConstraints={videoConstraints}
+        />
+      </div>
       <div className="absolute h-screen">
         <canvas
           ref={canvasRef}
@@ -307,10 +318,10 @@ const Home = () => {
                   ? canvasRef.current.offsetHeight / 10
                   : 0,
                 top: canvasRef.current
-                  ? (canvasRef.current.offsetHeight / 100) * 24
+                  ? (canvasRef.current.offsetHeight / 100) * 8
                   : 0,
                 left: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 10
+                  ? (canvasRef.current.offsetWidth / 100) * 8
                   : 0,
               }}
             >
@@ -332,10 +343,10 @@ const Home = () => {
                   ? canvasRef.current.offsetHeight / 10
                   : 0,
                 top: canvasRef.current
-                  ? (canvasRef.current.offsetHeight / 100) * 24
+                  ? (canvasRef.current.offsetHeight / 100) * 8
                   : 0,
                 left: canvasRef.current
-                  ? (canvasRef.current.offsetWidth / 100) * 22
+                  ? (canvasRef.current.offsetWidth / 100) * 20
                   : 0,
               }}
             >
@@ -354,12 +365,24 @@ const Home = () => {
           </h1>
         ) : null}
         {weather ? (
-          <h1 className="text-2xl text-white bg-slate-900/30 p-5 rounded-lg backdrop-blur-md font-light">
-            <span suppressHydrationWarning className="font-semibold">
-              {new Date().toLocaleTimeString()}
-            </span>{" "}
-            is the time.
-          </h1>
+          <div className="w-[32rem]">
+            <Card
+              category="Weather"
+              message={`${weatherRes?.weather[0]?.main}`}
+              temperature={`${Math.round(weatherRes?.main.temp)}°C`}
+              feelsLike={`${Math.round(weatherRes?.main.feels_like)}°C`}
+              weather={`${titleCase(
+                weatherRes?.weather[0].description
+                  ? weatherRes?.weather[0].description
+                  : ""
+              )}`}
+              infoCards={{
+                pressure: `${weatherRes?.main.pressure} hPa`,
+                visibility: `${weatherRes?.visibility / 1000} km`,
+                humidity: `${weatherRes?.main.humidity}%`,
+              }}
+            />
+          </div>
         ) : null}
       </div>
     </div>
