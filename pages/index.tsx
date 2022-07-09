@@ -220,7 +220,6 @@ const Home = () => {
         }
       }
     };
-
     detectRect(timeRef, "left", setTimeBool);
     detectRect(weatherRef, "left", setWeatherBool);
   };
@@ -365,7 +364,7 @@ const Home = () => {
           </h1>
         ) : null}
         {weather ? (
-          <div className="w-[32rem]">
+          <div className="w-[32rem] font-['Inter']">
             <Card
               category="Weather"
               message={`${weatherRes?.weather[0]?.main}`}
